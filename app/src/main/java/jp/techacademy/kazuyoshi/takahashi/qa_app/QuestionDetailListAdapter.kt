@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import jp.techacademy.kazuyoshi.takahashi.qa_app.R.id.imgBookmark
 
 class QuestionDetailListAdapter(context: Context, private val mQustion: Question) : BaseAdapter() {
     companion object {
@@ -103,6 +104,11 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
         //ユーザーの取得
         val user = FirebaseAuth.getInstance().currentUser
 
+        val imgBookmark = convertView!!.findViewById<View>(R.id.imgBookmark) as ImageButton
+        if (user == null){
+            imgBookmark.visibility = View.INVISIBLE
+        }
+
         if (user != null) {
 
             val dataBaseReference = FirebaseDatabase.getInstance().reference
@@ -128,13 +134,13 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
                 override fun onCancelled(snapshot: DatabaseError) {
                 }
             })
-
             //お気に入りボタンのクリックリスナー設定
             imgBookmark.setOnClickListener {
                 ClickBookmark(question, imgBookmark)
             }
         }
     }
+
 
     fun ClickBookmark(question: Question, imgBookmark: ImageButton) {
         val user = FirebaseAuth.getInstance().currentUser
